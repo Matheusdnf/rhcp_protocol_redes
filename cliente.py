@@ -10,15 +10,16 @@ PORTA_SERVIDOR_RHCP = 8000
 
 if len(sys.argv) >= 3:
     METHOD = sys.argv[1]
-    OBJECT = sys.argv[2]
+    OBJECT = sys.argv[2] 
 else:
     print("Erro, informe: METODO E OBJETO, pelo menos")
     print("Exemplo: python3 cliente.py GET sala/luz")
     exit(1)
 
+
 if len(sys.argv) == 4 and METHOD == "SET":
-    CAMP = sys.argv[3]
-else:
+    CAMP = sys.argv[3] 
+elif METHOD == "SET":
     print("Erro, informe o status.")
     print("Exemplo: python3 cliente.py SET sala/luz on")
     exit(1)
@@ -55,7 +56,7 @@ s.send(msg_req)
 # recebendo a resposta
 msg_res = s.recv(500)
 # tratando a resposta
-print(f"RESPOSTA: {msg_res}")
+print(f"RESPOSTA: \n{msg_res.decode('utf-8')}")
 
 # fechando o socket
 s.close()
