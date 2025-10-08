@@ -23,7 +23,7 @@ else:
     print("Exemplo: python3 cliente.py SET sala/luz on")
     exit(1)
 
-def mensagem(metodo:str,objeto:str,campos:str) -> bytes:
+def mensagem() -> bytes:
 #     METODO Objeto RHCP/1.0\r\n
 #     Campo: valor\r\n
 #     ...
@@ -49,15 +49,7 @@ s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 s.connect((IP_SERVIDOR_RHCP, PORTA_SERVIDOR_RHCP))
 
 # enviando a requisicao
-msg_req = mensagem(
-    metodo="GET",
-    objeto="/recursos/usuarios",
-    campos={
-        "Host": "127.0.0.1",
-        "User-Agent": "ClienteRHCP/1.0",
-        "Accept": "text/plain"
-    }
-)
+msg_req = mensagem()
 s.send(msg_req)
 
 # recebendo a resposta
