@@ -39,7 +39,9 @@ while True:
     print(f"REQUISICAO: {msg_req}")
 
     # TODO:
+
     # - processar a mensagem no formato adequado
+    
     # - carregar os dados do arquivo status.csv
     # - alterar o valor solicitado
     # - salvar o valor alterado no arquivo csv

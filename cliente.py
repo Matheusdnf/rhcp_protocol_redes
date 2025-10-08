@@ -1,4 +1,5 @@
 # importando o modulo socket
+import sys
 import socket
 
 # definindo o IP do servidor
@@ -7,6 +8,21 @@ IP_SERVIDOR_RHCP = "127.0.0.1"
 # definindo a porta do servidor
 PORTA_SERVIDOR_RHCP = 8000
 
+if len(sys.argv) >= 3:
+    METHOD = sys.argv[1]
+    OBJECT = sys.argv[2]
+else:
+    print("Erro, informe: METODO E OBJETO, pelo menos")
+    print("Exemplo: python3 cliente.py GET sala/luz")
+    exit(1)
+
+if len(sys.argv) == 4 and METHOD == "SET":
+    CAMP = sys.argv[3]
+else:
+    print("Erro, informe o status.")
+    print("Exemplo: python3 cliente.py SET sala/luz on")
+    exit(1)
+
 def mensagem(metodo:str,objeto:str,campos:str) -> bytes:
 #     METODO Objeto RHCP/1.0\r\n
 #     Campo: valor\r\n
@@ -14,10 +30,12 @@ def mensagem(metodo:str,objeto:str,campos:str) -> bytes:
 #     Campo: valor\r\n
 #     \r\n
     # Mensagem de requisição
-    mensagem_requisicao = f"{metodo} {objeto} RHCP/1.0\r\n"
+    mensagem_requisicao = f"{METHOD} {OBJECT} RHCP/1.0\r\n"
     cabecalhos = []
-    for campo, valor in campos.items():
-        cabecalhos.append(f"{campo}: {valor}")
+    if METHOD=="SET":
+        cabecalhos.append(f"Status: {CAMP}")
+    elif METHOD=="GET":
+        cabecalhos.append(f"Request: status")
 
     linhas = [mensagem_requisicao] + cabecalhos + [""]
     
