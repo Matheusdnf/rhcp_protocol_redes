@@ -2,9 +2,9 @@ sala/luz,off
 sala/ar,on
 sala/tv,off
 quarto/luz,on
-quarto/ar,on
-quarto/tv,on
+quarto/ar,off
+quarto/tv,off
 cozinha/luz,on
-cozinha/microondas,off
+cozinha/microondas,on
 banheiro/luz,off
 banheiro/chuveiro,on
