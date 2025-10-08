@@ -7,6 +7,23 @@ IP_SERVIDOR_RHCP = "127.0.0.1"
 # definindo a porta do servidor
 PORTA_SERVIDOR_RHCP = 8000
 
+def mensagem(metodo,objeto,campos):
+#     METODO Objeto RHCP/1.0\r\n
+#     Campo: valor\r\n
+#     ...
+#     Campo: valor\r\n
+#     \r\n
+    # Mensagem de requisição
+    mensagem_requisicao = f"{metodo} {objeto} RHCP/1.0\r\n"
+    cabecalhos = []
+    for campo, valor in campos.items():
+        cabecalhos.append(f"{campo}: {valor}")
+
+    linhas = [mensagem_requisicao] + cabecalhos + [""]
+    
+    return "\r\n".join(linhas).encode()
+
+
 # criando um socket Internet (INET IPv4) sobre TCP
 s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 
