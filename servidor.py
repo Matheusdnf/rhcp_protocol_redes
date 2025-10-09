@@ -115,7 +115,7 @@ while True:
                         with open('status.csv', mode='w', newline='') as arquivo_csv:
                             escritor_csv = csv.writer(arquivo_csv)
                             escritor_csv.writerows(dados)
-                        msg_res = f"RHCP/1.0 200 OK\r\nStatus atualizado para: {cabecalhos["Status"]}\r\n\r\n"
+                        msg_res = f"RHCP/1.0 200 OK\r\nStatus atualizado para: {cabecalhos['Status']}\r\n\r\n"
                     except Exception as e:
                         print(f"Erro ao salvar o arquivo status.csv: {e}")
                         msg_res = "RHCP/1.0 500 Internal Server Error\r\n\r\n"
