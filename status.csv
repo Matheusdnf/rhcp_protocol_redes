@@ -1,10 +1,10 @@
-sala/luz,off
+sala/luz,on
 sala/ar,on
 sala/tv,off
 quarto/luz,on
-quarto/ar,off
+quarto/ar,on
 quarto/tv,off
 cozinha/luz,on
 cozinha/microondas,on
-banheiro/luz,off
-banheiro/chuveiro,on
+banheiro/luz,on
+banheiro/chuveiro,off

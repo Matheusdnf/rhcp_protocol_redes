@@ -1,9 +1,67 @@
 import sys
 import csv
-
-# importando o modulo socket
+from datetime import datetime
 import socket
 
+def close_socket_with_message(sock, message):
+    sock.send(message.encode())
+    sock.close()
+
+def make_response(code=200, msg=None, objeto=None, status=None):
+    linhas = [f"RHCP/1.0 {code} {msg if msg else 'OK'}"]
+    if objeto: linhas.append(f"Object: {objeto}")
+    if status: linhas.append(f"Status: {status}")
+    linhas.append("Date: " + str(datetime.now()))
+    linhas.append("")
+    return "\r\n".join(linhas) + "\r\n"
+
+
+def parse_request(msg: str):
+    lines = msg.split("\r\n")
+    line_req = lines[0]
+    parts = line_req.split(" ")
+    if len(parts) != 3:
+        return None, None, None, None
+    method = parts[0]
+    obj = parts[1]
+    version = parts[2]
+    headers = {}
+    for line in lines[1:]:
+        if not line.strip():
+            break
+        key, value = line.split(":", 1)
+        headers[key.strip()] = value.strip()
+    return method, obj, version, headers
+
+
+def handle_request(method, obj, headers, data):
+    if obj not in data:
+        return make_response(404, "Not Found")
+    
+    if method == "GET":
+        if "Request" not in headers or headers["Request"] != "status":
+            return make_response(400, "Bad Request")
+        status = data[obj]
+        return make_response(200, "OK", objeto=obj, status=status)
+    else:
+        if "Status" not in headers:
+            return make_response(400, "Bad Request")
+        new_status = headers["Status"]
+        if new_status not in ["on", "off"]:
+            return make_response(400, "Bad Request")
+        data[obj] = new_status
+        
+        # salvando os dados atualizados no arquivo
+        try:
+            with open('status.csv', mode='w', newline='') as arquivo_csv:
+                csv_writer = csv.writer(arquivo_csv)
+                for key, value in data.items():
+                    csv_writer.writerow([key, value])
+        except Exception as e:
+            print(f"Erro ao escrever no arquivo status.csv: {e}")
+            return make_response(500, "Internal Server Error")
+        return make_response(200, "OK", objeto=obj, status=new_status)
+    
 # verificando os argumentos passados
 if len(sys.argv) == 2:
     # definindo a porta do servidor
@@ -35,97 +93,33 @@ while True:
 
     print(f"Uma conexao com o endereco {clientaddress[0]}:{clientaddress[1]} foi estabelecida")
 
-    # obtendo a mensagem de requisicao
     msg_req = clientsocket.recv(4096).decode()
-    print(f"REQUISICAO: \n {msg_req}")
-    # Tipo da mensagem é string mesmo
-    # mas é exibindo chave e valor? , para poder tratar o que está sendo pedido ?
-    # string. como ta ai só
-    # acho que e usando splitzao mesmo, mas é tao porquinho :(
-    # TODO:
     
-    # - processar a mensagem no formato adequado
-    # Dividir a mensagem em linhas
+    print(f"REQUISICAO: \n{msg_req}")
 
-    linhas = msg_req.split("\r\n")
-    # Extrair a linha de requisição
-    linha_requisicao = linhas[0]
-    
-    
-    # Dividir a linha de requisição em partes
-    partes = linha_requisicao.split(" ")
-    if len(partes) != 3:
-        print("Erro na linha de requisição")
-        clientsocket.close()
-        continue
-    
-    # o metodo (GET ou SET)
-    metodo = partes[0]
-    
-    # o objeto (sala/luz, sala/ar, cozinha/luz, etc)
-    objeto = partes[1]
-
-    versao = partes[2]
-    
-    if versao != "RHCP/1.0":
-        print("Versao RHCP invalida")
-        clientsocket.close()
-        continue
-
-    # Extrair os cabeçalhos
-    linha_cabecalhos = linhas[2] 
-
-    cabecalhos = {}
-    if linha_cabecalhos:
-        partes_cabecalhos = linha_cabecalhos.split(": ")
-        if len(partes_cabecalhos) == 2:
-            chave = partes_cabecalhos[0]
-            valor = partes_cabecalhos[1]
+    method, obj, version, headers = parse_request(msg_req)
         
-            # o campo (status on/off, request status, etc)    
-            cabecalhos[chave] = valor
+    if method is None or version != "RHCP/1.0":
+        close_socket_with_message(clientsocket, make_response(400, "Bad Request"))
+        continue
     
-    # - carregar os dados do arquivo status.csv
+    if method not in ["GET", "SET"]:
+        close_socket_with_message(clientsocket, make_response(405, "Method Not Allowed"))
+        continue
+
+    # Carregar os dados do arquivo status.csv
     try:
         with open('status.csv', mode='r') as arquivo_csv:
-            leitor_csv = csv.reader(arquivo_csv)
-            dados = list(leitor_csv)
-    except FileNotFoundError:
-        print("Arquivo status.csv não encontrado.")
-        clientsocket.close()
-        continue
+            csv_reader = csv.reader(arquivo_csv)
+            data = list(csv_reader)
+        datadict = {row[0]: row[1] for row in data}
+
     except Exception as e:
         print(f"Erro ao ler o arquivo status.csv: {e}")
-        clientsocket.close()
+        close_socket_with_message(clientsocket, make_response(500, "Internal Server Error"))
         continue
     
-    objeto_encontrado = False
-    for linha in dados:
-        if linha[0] == objeto:
-            objeto_encontrado = True
-            if metodo == "GET":
-                status_atual = linha[1]
-                msg_res = f"RHCP/1.0 200 OK\r\nStatus: {status_atual}\r\n\r\n"
-            
-            elif metodo == "SET":
-                if "Status" in cabecalhos:
-                    linha[1] = cabecalhos["Status"]
-
-                    try:
-                        with open('status.csv', mode='w', newline='') as arquivo_csv:
-                            escritor_csv = csv.writer(arquivo_csv)
-                            escritor_csv.writerows(dados)
-                        msg_res = f"RHCP/1.0 200 OK\r\nStatus atualizado para: {cabecalhos['Status']}\r\n\r\n"
-                    except Exception as e:
-                        print(f"Erro ao salvar o arquivo status.csv: {e}")
-                        msg_res = "RHCP/1.0 500 Internal Server Error\r\n\r\n"
-                else:
-                    msg_res = "RHCP/1.0 400 Bad Request\r\n\r\n"
-                    
-            break
-  
-    if not objeto_encontrado:
-        msg_res = "RHCP/1.0 404 Not Found\r\n\r\n"
+    msg_res = handle_request(method, obj, headers, datadict)
 
     # enviando a mensagem de resposta ao cliente
     clientsocket.send(msg_res.encode())

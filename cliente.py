@@ -73,7 +73,7 @@ s.connect((IP_SERVIDOR_RHCP, PORTA_SERVIDOR_RHCP))
 
 # enviando a requisicao
 msg_req = load_args()
-print(f"REQUISICAO: \n{msg_req.decode('utf-8')}")
+print(f"REQUISICAO: \n{msg_req}")
 # Formato da requisição:
 # GET sala/luz RHCP/1.0
 # Request: status
@@ -82,7 +82,7 @@ s.send(msg_req)
 # recebendo a resposta
 msg_res = s.recv(500)
 # tratando a resposta
-print(f"RESPOSTA: \n{msg_res.decode('utf-8')}")
+print(f"RESPOSTA: \n{msg_res}")
 
 # fechando o socket
 s.close()
