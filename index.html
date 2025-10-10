@@ -1,38 +1,70 @@
-<html>
-  <head>
-    <title>Casa Inteligente - RHCP</title>
-    <link rel="stylesheet" href="style.css" />
-    <script type="text/javascript" src="script.js"></script>
-  </head>
-
-  <body>
-    <div class="casa">
-      <div class="linha">
-        <div class="comodo">
-          <p>Sala</p>
-          <span>Luz: </span><span id="sala/luz"></span><br />
-          <span>Ar: </span><span id="sala/ar"></span><br />
-          <span>TV: </span><span id="sala/tv"></span><br />
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<title>Casa Inteligente - RHCP</title>
+<link rel="stylesheet" href="style.css">
+<script src="script.js"></script>
+</head>
+<body>
+  <div class="casa">
+    <div class="linha">
+      <div class="comodo">
+        <p>Sala</p>
+        <div class="device">
+          <span class="device-name">Luz</span>
+          <span id="sala/luz" class="device-status off">OFF</span>
         </div>
-        <div class="comodo">
-          <p>Quarto</p>
-          <span>Luz: </span><span id="quarto/luz"></span><br />
-          <span>Ar: </span><span id="quarto/ar"></span><br />
-          <span>TV: </span><span id="quarto/tv"></span><br />
+        <div class="device">
+          <span class="device-name">Ar</span>
+          <span id="sala/ar" class="device-status off">OFF</span>
+        </div>
+        <div class="device">
+          <span class="device-name">TV</span>
+          <span id="sala/tv" class="device-status off">OFF</span>
         </div>
       </div>
-      <div class="linha">
-        <div class="comodo">
-          <p>Cozinha</p>
-          <span>Luz: </span><span id="cozinha/luz"></span><br />
-          <span>Microondas: </span><span id="cozinha/microondas"></span><br />
+      <div class="comodo">
+        <p>Quarto</p>
+        <div class="device">
+          <span class="device-name">Luz</span>
+          <span id="quarto/luz" class="device-status off">OFF</span>
         </div>
-        <div class="comodo">
-          <p>Banheiro</p>
-          <span>Luz: </span><span id="banheiro/luz"></span><br />
-          <span>Chuveiro: </span><span id="banheiro/chuveiro"></span><br />
+        <div class="device">
+          <span class="device-name">Ar</span>
+          <span id="quarto/ar" class="device-status off">OFF</span>
+        </div>
+        <div class="device">
+          <span class="device-name">TV</span>
+          <span id="quarto/tv" class="device-status off">OFF</span>
         </div>
       </div>
     </div>
-  </body>
+
+    <div class="linha">
+      <div class="comodo">
+        <p>Cozinha</p>
+        <div class="device">
+          <span class="device-name">Luz</span>
+          <span id="cozinha/luz" class="device-status off">OFF</span>
+        </div>
+        <div class="device">
+          <span class="device-name">Microondas</span>
+          <span id="cozinha/microondas" class="device-status off">OFF</span>
+        </div>
+      </div>
+      <div class="comodo">
+        <p>Banheiro</p>
+        <div class="device">
+          <span class="device-name">Luz</span>
+          <span id="banheiro/luz" class="device-status off">OFF</span>
+        </div>
+        <div class="device">
+          <span class="device-name">Chuveiro</span>
+          <span id="banheiro/chuveiro" class="device-status off">OFF</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</body>
 </html>

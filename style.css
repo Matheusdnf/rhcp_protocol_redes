@@ -1,38 +1,101 @@
+/* Reset básico */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+body {
+  min-height: 100vh;
+  background: linear-gradient(135deg, #42a0a7, #3665a5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 20px;
+}
+
+/* Container da casa */
 .casa {
-    display: table;
-    width: 100%; 
-    border-collapse: collapse;
+  display: flex;
+  flex-direction: column;
+  gap: 30px;
 }
+
+/* Linhas de cômodos */
 .linha {
-    display: table-row;
-    width: auto;
-    clear: both;
+  display: flex;
+  gap: 30px;
 }
+
+/* Cômodo individual */
 .comodo {
-    float: left;
-    display: table-column;         
-    width: 500px;         
-    height: 200px;         
-    background-color: #ccc;
-    border: 2px solid black;
-    font-size: 18px;
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 20px;
+  padding: 20px;
+  width: 200px;
+  backdrop-filter: blur(10px);
+  box-shadow: 0 8px 32px rgba(0,0,0,0.2);
+  border: 1px solid rgba(255,255,255,0.3);
+  color: #fff;
+  transition: transform 0.3s, box-shadow 0.3s;
 }
+
+.comodo:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 12px 40px rgba(0,0,0,0.3);
+}
+
 .comodo p {
-    text-align: center;
-    background:#ccc;
-    color:#000;
-    display:block;
-    float:center;
-    /* border: 1px solid black; */
-    font-size: 22px;
+  font-size: 1.3rem;
+  font-weight: bold;
+  margin-bottom: 15px;
+  text-align: center;
+  text-shadow: 0 2px 5px rgba(0,0,0,0.3);
 }
-.on {
-    background:#0f0;
-    color:#000;
-    font-weight: bold;
+
+/* Linha dispositivo: flex para alinhar nome e status */
+.device {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 8px;
+  padding: 4px 8px;
+  border-radius: 8px;
+  background: rgba(255,255,255,0.05);
 }
-.off {
-    background:#f00;
-    color:#000;
-    font-weight: bold;
+
+/* Nome do dispositivo */
+.device-name {
+  font-weight: bold;
+  color: #fff;
+}
+
+/* Status do dispositivo */
+.ON, .OFF, .on, .off {
+  font-weight: bold;
+  padding: 6px 12px;
+  border-radius: 12px;
+  min-width: 40px;
+  text-align: center;
+  backdrop-filter: blur(8px);
+  transition: all 0.3s ease;
+}
+
+.ON, .on {
+  background: rgba(0, 255, 0, 0.4);
+  color: #fff;
+  box-shadow: 0 4px 15px rgba(0, 255, 0, 0.4);
+}
+
+.OFF, .off {
+  background: rgba(255, 0, 0, 0.4);
+  color: #fff;
+  box-shadow: 0 4px 15px rgba(255, 0, 0, 0.4);
+}
+
+.device-status.on:hover, .device-status.off:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(0,0,0,0.25);
+  cursor: pointer;
 }
