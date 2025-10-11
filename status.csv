@@ -5,6 +5,6 @@ quarto/luz,on
 quarto/ar,on
 quarto/tv,off
 cozinha/luz,on
-cozinha/microondas,on
-banheiro/luz,on
-banheiro/chuveiro,off
+cozinha/microondas,off
+banheiro/luz,off
+banheiro/chuveiro,on

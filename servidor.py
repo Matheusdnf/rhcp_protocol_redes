@@ -54,7 +54,7 @@ def handle_request(method, obj, headers, data):
         # salvando os dados atualizados no arquivo
         try:
             with open('status.csv', mode='w', newline='') as arquivo_csv:
-                csv_writer = csv.writer(arquivo_csv)
+                csv_writer = csv.writer(arquivo_csv, lineterminator='\n')
                 for key, value in data.items():
                     csv_writer.writerow([key, value])
         except Exception as e:

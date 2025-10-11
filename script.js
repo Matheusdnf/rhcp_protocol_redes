@@ -19,7 +19,7 @@ async function loadCSV() {
       // quebrando por colunas
       var data = lines[i].split(",");
       if (data.length == 2) {
-        changeStatus(data[0].trim(), data[1].trim().toUpperCase());
+        changeStatus(data[0], data[1].toUpperCase());
       }
     }
     // adicionando este log para 'tentar' forçar as atualizações
